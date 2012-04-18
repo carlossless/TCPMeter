@@ -19,7 +19,7 @@
 
 - (void)connectWithHost:(NSString *)host port:(int)port;
 - (void)sendMotionDataPitch:(float)pitch Roll:(float)roll Yaw:(float)yaw;
-- (void)sendLocationDataLatitude:(float)latitude Longitude:(float)longitude;
+- (void)sendLocationDataLatitude:(float)latitude Longitude:(float)longitude horizontalAccuracy:(float)horizontalAccuracy verticalAccuracy:(float)verticalAccuracy;
 
 
 @end

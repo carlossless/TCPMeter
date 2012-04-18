@@ -7,11 +7,7 @@
 //
 
 #import "TCPClient.h"
-
-#define GPS_DATA_REQUEST 11
-#define MOTION_DATA_REQUEST 12
-#define GPS_DATA_RESPONSE 13
-#define MOTION_DATA_RESPONSE 14
+#import "Constants.h"
 
 @implementation TCPClient
 
@@ -50,21 +46,21 @@
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ConnectedToServer" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CONNECTED_NOTIFICATION object:self];
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"DisconnectedFromServer" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DISCONNECTED_NOTIFICATION object:self];
 }
 
-- (void)sendLocationDataLatitude:(float)latitude Longitude:(float)longitude
+- (void)sendLocationDataLatitude:(float)latitude Longitude:(float)longitude horizontalAccuracy:(float)horizontalAccuracy verticalAccuracy:(float)verticalAccuracy
 {
     if(socket.isConnected)
     {
-        NSString *dataString = [NSString stringWithFormat:@"GPS: %.6f %.6f",latitude,longitude];
+        NSString *dataString = [NSString stringWithFormat:@"%@: %.6f %.6f %.2f %.2f",GPS_RESPONSE_HEADER,latitude,longitude,horizontalAccuracy,verticalAccuracy];
         NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-        [socket writeData:data withTimeout:20 tag:GPS_DATA_RESPONSE];
+        [socket writeData:data withTimeout:20 tag:GPS_DATA_RESPONSE_TAG];
     }
 }
 
@@ -72,9 +68,9 @@
 {
     if(socket.isConnected)
     {
-        NSString *dataString = [NSString stringWithFormat:@"MOTION: %.3f %.3f %.3f",pitch,roll,yaw];
+        NSString *dataString = [NSString stringWithFormat:@"%@: %.3f %.3f %.3f",MOTION_RESPONSE_HEADER,pitch,roll,yaw];
         NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-        [socket writeData:data withTimeout:20 tag:MOTION_DATA_RESPONSE];
+        [socket writeData:data withTimeout:20 tag:MOTION_DATA_RESPONSE_TAG];
     }
 } 
 
@@ -82,11 +78,11 @@
 {
     NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
-    if([dataString isEqualToString:@"GPS_REQUEST"])
+    if([dataString isEqualToString:GPS_REQUEST_CMD])
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"GPSDataRequest" object:self];
-    } else if ([dataString isEqualToString:@"MOTION_REQUEST"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MotionDataRequest" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:GPS_REQUEST_NOTIFICATION object:self];
+    } else if ([dataString isEqualToString:MOTION_REQUEST_CMD]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MOTION_REQUEST_NOTIFICATION object:self];
     }
     
     [socket readDataWithTimeout:-1 tag:0];

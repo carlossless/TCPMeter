@@ -33,6 +33,7 @@
 		C532CD5C152F2A5F006C237B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C532CD671530D2CD006C237B /* trunk-punks-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trunk-punks-logo@2x.png"; sourceTree = "<group>"; };
 		C532CEF515334395006C237B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		C53C0802153EFE6F0068D5D8 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		C567B70F1524FDB500CCADA0 /* TCPMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCPMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C567B7131524FDB500CCADA0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C567B7151524FDB500CCADA0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -151,6 +152,7 @@
 				C567B71C1524FDB500CCADA0 /* InfoPlist.strings */,
 				C567B71F1524FDB500CCADA0 /* main.m */,
 				C567B7211524FDB500CCADA0 /* TCPMeter-Prefix.pch */,
+				C53C0802153EFE6F0068D5D8 /* Constants.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

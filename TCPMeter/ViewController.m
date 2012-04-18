@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "TCPClient.h"
+#import "Constants.h"
 
 @interface ViewController ()
 
@@ -50,11 +51,11 @@
         self.lastMotionValue = motion;
     };
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverConnectionStatusChangeNotification:) name:@"ConnectedToServer" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverConnectionStatusChangeNotification:) name:@"DisconnectedFromServer" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverConnectionStatusChangeNotification:) name:CONNECTED_NOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverConnectionStatusChangeNotification:) name:DISCONNECTED_NOTIFICATION object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveDataRequestNotification:) name:@"GPSDataRequest" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveDataRequestNotification:) name:@"MotionDataRequest" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveDataRequestNotification:) name:GPS_REQUEST_NOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveDataRequestNotification:) name:MOTION_REQUEST_NOTIFICATION object:nil];
     
     [self.locationManager startUpdatingLocation];
     [self.motionManager startDeviceMotionUpdatesToQueue:opQ withHandler:motionHandler];
@@ -80,18 +81,18 @@
 
 - (void)recieveDataRequestNotification:(NSNotification *)notification
 {
-    if (notification.name == @"GPSDataRequest") {
-        [self.client sendLocationDataLatitude:self.lastLocationValue.coordinate.latitude Longitude:self.lastLocationValue.coordinate.longitude];
-    } else if (notification.name == @"MotionDataRequest") {
+    if (notification.name == GPS_REQUEST_NOTIFICATION) {
+        [self.client sendLocationDataLatitude:self.lastLocationValue.coordinate.latitude Longitude:self.lastLocationValue.coordinate.longitude horizontalAccuracy:self.lastLocationValue.horizontalAccuracy verticalAccuracy:self.lastLocationValue.verticalAccuracy];
+    } else if (notification.name == MOTION_REQUEST_NOTIFICATION) {
         [self.client sendMotionDataPitch:self.lastMotionValue.attitude.pitch Roll:self.lastMotionValue.attitude.roll Yaw:self.lastMotionValue.attitude.yaw];
     }
 }
 
 - (void)serverConnectionStatusChangeNotification:(NSNotification *)notification
 {
-    if (notification.name == @"ConnectedToServer") {
+    if (notification.name == CONNECTED_NOTIFICATION) {
         self.serverStatusView.text = @"Connected";
-    } else if (notification.name == @"DisconnectedFromServer") {
+    } else if (notification.name == DISCONNECTED_NOTIFICATION) {
         self.serverStatusView.text = @"Disconnected";
     }
 }
