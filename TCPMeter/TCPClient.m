@@ -20,23 +20,41 @@
 
 - (void)connectWithHost:(NSString *)host port:(int)port
 {    
-    if (![lastHost isEqualToString:host] || lastPort != port)
-    {
-        connectionAttempts = 0;
-        lastHost = host;
-        lastPort = port;
-    }
+    connectionAttempts = 0;
+    lastHost = host;
+    lastPort = port;
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:CONNECTING_NOTIFICATION object:self];
+    
+    connectionAttempts++;
     NSError *error;
     if([socket connectToHost:host onPort:port error:&error])
     {
         [socket readDataWithTimeout:-1 tag:0];
-        connectionAttempts = 0;
     } else {
         NSLog(@"%@",error);
-        connectionAttempts++;
-        [self connectWithHost:host port:port];
+        [self reconnect];
     }
+}
+
+- (void)reconnect
+{    
+    [[NSNotificationCenter defaultCenter] postNotificationName:CONNECTING_NOTIFICATION object:self];
+    
+    connectionAttempts++;
+    NSError *error;
+    if([socket connectToHost:lastHost onPort:lastPort error:&error])
+    {
+        [socket readDataWithTimeout:-1 tag:0];
+    } else {
+        NSLog(@"%@",error);
+        if (connectionAttempts < MAX_RECONNECTION_TRIES) [self reconnect];
+    }
+}
+
+- (void)tryConnectingAfterInterval:(NSTimer *)timer
+{
+    [self reconnect];
 }
 
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
@@ -47,11 +65,13 @@
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:CONNECTED_NOTIFICATION object:self];
+    connectionAttempts = 0;
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:DISCONNECTED_NOTIFICATION object:self];
+    if (connectionAttempts < MAX_RECONNECTION_TRIES) [[NSRunLoop mainRunLoop] addTimer:[NSTimer scheduledTimerWithTimeInterval:RECONNECTION_INTERVAL target:self selector:@selector(tryConnectingAfterInterval:) userInfo:nil repeats:NO] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)sendLocationDataLatitude:(float)latitude Longitude:(float)longitude horizontalAccuracy:(float)horizontalAccuracy verticalAccuracy:(float)verticalAccuracy

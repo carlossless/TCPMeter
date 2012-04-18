@@ -52,6 +52,7 @@
     };
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverConnectionStatusChangeNotification:) name:CONNECTED_NOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverConnectionStatusChangeNotification:) name:CONNECTING_NOTIFICATION object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverConnectionStatusChangeNotification:) name:DISCONNECTED_NOTIFICATION object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveDataRequestNotification:) name:GPS_REQUEST_NOTIFICATION object:nil];
@@ -60,7 +61,6 @@
     [self.locationManager startUpdatingLocation];
     [self.motionManager startDeviceMotionUpdatesToQueue:opQ withHandler:motionHandler];
     
-    self.serverStatusView.text = @"Connecting...";
     self.client = [[TCPClient alloc] init];
     [self.client connectWithHost:@"mindw0rk.local" port:6613];
 }
@@ -92,6 +92,8 @@
 {
     if (notification.name == CONNECTED_NOTIFICATION) {
         self.serverStatusView.text = @"Connected";
+    } else if (notification.name == CONNECTING_NOTIFICATION) {
+        self.serverStatusView.text = @"Connecting...";
     } else if (notification.name == DISCONNECTED_NOTIFICATION) {
         self.serverStatusView.text = @"Disconnected";
     }

@@ -21,6 +21,11 @@
 #define GPS_REQUEST_NOTIFICATION @"GPSDataRequest"
 #define MOTION_REQUEST_NOTIFICATION @"MotionDataRequest"
 #define CONNECTED_NOTIFICATION @"ConnectedToServer"
+#define CONNECTING_NOTIFICATION @"ConnectingToServer"
 #define DISCONNECTED_NOTIFICATION @"DisconnectedFromServer"
+
+#define MAX_RECONNECTION_TRIES 10
+
+#define RECONNECTION_INTERVAL 2.0f
 
 #endif
