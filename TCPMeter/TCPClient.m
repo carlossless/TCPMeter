@@ -23,18 +23,7 @@
     connectionAttempts = 0;
     lastHost = host;
     lastPort = port;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:CONNECTING_NOTIFICATION object:self];
-    
-    connectionAttempts++;
-    NSError *error;
-    if([socket connectToHost:host onPort:port error:&error])
-    {
-        [socket readDataWithTimeout:-1 tag:0];
-    } else {
-        NSLog(@"%@",error);
-        [self reconnect];
-    }
+    [self reconnect];
 }
 
 - (void)reconnect
@@ -43,7 +32,7 @@
     
     connectionAttempts++;
     NSError *error;
-    if([socket connectToHost:lastHost onPort:lastPort error:&error])
+    if([socket connectToHost:lastHost onPort:lastPort withTimeout:CONNECTION_TIMEOUT_DURATION error:&error])
     {
         [socket readDataWithTimeout:-1 tag:0];
     } else {
@@ -80,7 +69,7 @@
     {
         NSString *dataString = [NSString stringWithFormat:@"%@: %.6f %.6f %.2f %.2f",GPS_RESPONSE_HEADER,latitude,longitude,horizontalAccuracy,verticalAccuracy];
         NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-        [socket writeData:data withTimeout:20 tag:GPS_DATA_RESPONSE_TAG];
+        [socket writeData:data withTimeout:DATAWRITE_TIMEOUT_DURATION tag:GPS_DATA_RESPONSE_TAG];
     }
 }
 
@@ -90,7 +79,7 @@
     {
         NSString *dataString = [NSString stringWithFormat:@"%@: %.3f %.3f %.3f",MOTION_RESPONSE_HEADER,pitch,roll,yaw];
         NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-        [socket writeData:data withTimeout:20 tag:MOTION_DATA_RESPONSE_TAG];
+        [socket writeData:data withTimeout:DATAWRITE_TIMEOUT_DURATION tag:MOTION_DATA_RESPONSE_TAG];
     }
 } 
 
@@ -105,7 +94,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:MOTION_REQUEST_NOTIFICATION object:self];
     }
     
-    [socket readDataWithTimeout:-1 tag:0];
+    [socket readDataWithTimeout:DATAWRITE_TIMEOUT_DURATION tag:0];
 }
 
 @end
