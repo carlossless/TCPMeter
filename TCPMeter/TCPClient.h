@@ -15,6 +15,7 @@
     NSString *lastHost;
     int lastPort;
     int connectionAttempts;
+    BOOL tryReconnecting;
 }
 
 - (void)connectWithHost:(NSString *)host port:(int)port;

@@ -11,10 +11,17 @@
 
 @implementation TCPClient
 
+- (void)stopReconnectingNotification:(NSNotification *) notification
+{
+    tryReconnecting = NO;
+    [socket disconnect];
+}
+
 - (id)init
 {
     self = [super init];
     socket = [[AsyncSocket alloc] initWithDelegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopReconnectingNotification:) name:STOP_RECONECTION_NOTIFICATION object:nil];
     return self;
 }
 
@@ -23,6 +30,8 @@
     connectionAttempts = 0;
     lastHost = host;
     lastPort = port;
+    tryReconnecting = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:RECONNECTION_STARTED_NOTIFICATION object:self];
     [self reconnect];
 }
 
@@ -37,7 +46,8 @@
         [socket readDataWithTimeout:-1 tag:0];
     } else {
         NSLog(@"%@",error);
-        if (connectionAttempts < MAX_RECONNECTION_TRIES) [self reconnect];
+        if (connectionAttempts < MAX_RECONNECTION_TRIES && tryReconnecting) [self reconnect];
+        else [[NSNotificationCenter defaultCenter] postNotificationName:RECONNECTION_STOPPED_NOTIFICATION object:self];
     }
 }
 
@@ -60,7 +70,8 @@
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:DISCONNECTED_NOTIFICATION object:self];
-    if (connectionAttempts < MAX_RECONNECTION_TRIES) [[NSRunLoop mainRunLoop] addTimer:[NSTimer scheduledTimerWithTimeInterval:RECONNECTION_INTERVAL target:self selector:@selector(tryConnectingAfterInterval:) userInfo:nil repeats:NO] forMode:NSDefaultRunLoopMode];
+    if (connectionAttempts < MAX_RECONNECTION_TRIES && tryReconnecting) [[NSRunLoop mainRunLoop] addTimer:[NSTimer scheduledTimerWithTimeInterval:RECONNECTION_INTERVAL target:self selector:@selector(tryConnectingAfterInterval:) userInfo:nil repeats:NO] forMode:NSDefaultRunLoopMode];
+    else [[NSNotificationCenter defaultCenter] postNotificationName:RECONNECTION_STOPPED_NOTIFICATION object:self];
 }
 
 - (void)sendLocationDataLatitude:(float)latitude Longitude:(float)longitude horizontalAccuracy:(float)horizontalAccuracy verticalAccuracy:(float)verticalAccuracy
