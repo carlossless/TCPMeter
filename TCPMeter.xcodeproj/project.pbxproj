@@ -24,8 +24,8 @@
 		C5885FA5153472C8003C7B8A /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C5885FA2153472C8003C7B8A /* AsyncSocket.m */; };
 		C5885FA6153472C8003C7B8A /* TCPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = C5885FA4153472C8003C7B8A /* TCPClient.m */; };
 		C5B27CD8152F108F00541BD9 /* trunk-punks-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = C5B27CD7152F108F00541BD9 /* trunk-punks-logo.png */; };
-		C5DF13CC152F0742001CEFEF /* main-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C5DF13CA152F0742001CEFEF /* main-icon.png */; };
-		C5DF13CD152F0742001CEFEF /* main-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5DF13CB152F0742001CEFEF /* main-icon@2x.png */; };
+		C5DF13CC152F0742001CEFEF /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C5DF13CA152F0742001CEFEF /* icon.png */; };
+		C5DF13CD152F0742001CEFEF /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5DF13CB152F0742001CEFEF /* icon@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,8 +54,8 @@
 		C5885FA3153472C8003C7B8A /* TCPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPClient.h; sourceTree = "<group>"; };
 		C5885FA4153472C8003C7B8A /* TCPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCPClient.m; sourceTree = "<group>"; };
 		C5B27CD7152F108F00541BD9 /* trunk-punks-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trunk-punks-logo.png"; sourceTree = "<group>"; };
-		C5DF13CA152F0742001CEFEF /* main-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "main-icon.png"; sourceTree = "<group>"; };
-		C5DF13CB152F0742001CEFEF /* main-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "main-icon@2x.png"; sourceTree = "<group>"; };
+		C5DF13CA152F0742001CEFEF /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		C5DF13CB152F0742001CEFEF /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,8 +82,8 @@
 				C532CD5C152F2A5F006C237B /* Default.png */,
 				C532CD5A152F2A57006C237B /* Default@2x.png */,
 				C5B27CD7152F108F00541BD9 /* trunk-punks-logo.png */,
-				C5DF13CA152F0742001CEFEF /* main-icon.png */,
-				C5DF13CB152F0742001CEFEF /* main-icon@2x.png */,
+				C5DF13CA152F0742001CEFEF /* icon.png */,
+				C5DF13CB152F0742001CEFEF /* icon@2x.png */,
 			);
 			name = Resources;
 			path = ..;
@@ -211,8 +211,8 @@
 			files = (
 				C567B71E1524FDB500CCADA0 /* InfoPlist.strings in Resources */,
 				C567B72A1524FDB500CCADA0 /* ViewController.xib in Resources */,
-				C5DF13CC152F0742001CEFEF /* main-icon.png in Resources */,
-				C5DF13CD152F0742001CEFEF /* main-icon@2x.png in Resources */,
+				C5DF13CC152F0742001CEFEF /* icon.png in Resources */,
+				C5DF13CD152F0742001CEFEF /* icon@2x.png in Resources */,
 				C5B27CD8152F108F00541BD9 /* trunk-punks-logo.png in Resources */,
 				C532CD5B152F2A57006C237B /* Default@2x.png in Resources */,
 				C532CD5D152F2A5F006C237B /* Default.png in Resources */,
